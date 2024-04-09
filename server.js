@@ -66,8 +66,9 @@ async function init(){
 
     }
 }
-
+//stiching the route to server.js file
 require("./routes/auth.route")(app);
+
 
 
 

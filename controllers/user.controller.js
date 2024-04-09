@@ -2,6 +2,8 @@
 
 const bcrypt = require("bcryptjs");
 const user_model = require("../models/user.model");
+const jwt = require("jsonwebtoken");
+const tokenConfig = require("../configs/token.config");
 
 exports.signup = async(req,res) =>{
     //read the requested body
@@ -35,3 +37,43 @@ exports.signup = async(req,res) =>{
 
 
 }
+
+//adding method for SignIn as well
+
+exports.signIn = async(req,res) =>{
+    //check if the userId is present int the system or not
+
+    const user = await user_model.findOne({userId : req.body.userId})
+
+    if(user == null){
+        res.status(400).send({
+            message : "User with the given user Id is not found!"
+        })
+    }
+
+    //check the password given by the client is correct or not
+
+    const verifyPassword = bcrypt.compareSync(user.password,req.body.password)
+
+    if(!verifyPassword){
+        res.status(400).send({
+            message : "Invalid Password!"
+        })
+    }
+
+    //generate the jwt token
+
+    const token = jwt.sign({id : user.userId},tokenConfig.secret,{expiresIn : 120})
+
+    res.status(200).send({
+        name : user.name,
+        userId : user.userId,
+        email : user.email,
+        UserType : user.UserType,
+        accessToken : token
+
+
+
+    })
+}
+
