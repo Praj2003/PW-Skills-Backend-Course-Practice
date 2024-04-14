@@ -34,7 +34,7 @@ db.once("open",() =>{
 async function init(){
     //Checking whether admin is present or not if not create one 
     try{
-        const user = await user_model.findOne({userId : "admin"});
+        const user = await user_model.findOne({userId : "Admin"});
 
         if(user){
             console.log("Admin is already present in the database!");
@@ -47,8 +47,8 @@ async function init(){
 
     try{
         const admin = {
-            name : "Bhawnish Kumar",
-            email : "Bhawnish@gamil.com",
+            name : "Prajval Kumar",
+            email : "Prajvarish@gamil.com",
             userId : "Admin",
             UserType : "ADMIN",
             password : bcrypt.hashSync("Welcome1",8)
@@ -68,6 +68,8 @@ async function init(){
 }
 //stiching the route to server.js file
 require("./routes/auth.route")(app);
+
+require("./routes/category.route")(app);
 
 
 
